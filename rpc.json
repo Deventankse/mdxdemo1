@@ -1,0 +1,1379 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": [{
+      "$ref": "../md_files/README.md"
+    },{
+      "$ref": "../custom-component.mdx"
+    }],
+    "version": "v1.0",
+    "title": "RP Controller - Web API"
+  },
+  "x-servers": [
+    {
+      "url": "https://sandboxrprel.azurewebsites.net",
+      "description": "Sandbox"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/v1/token": {
+      "post": {
+        "tags": [
+          "Token"
+        ],
+        "summary": "Create Token",
+        "description": "A web token is created and returned. The Client application then uses the token to access APIs in the next request until the token is valid.",
+        "operationId": "gettingtoken",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          }
+        }
+      }
+    },
+    "/v1/system/settings/webserver": {
+      "get": {
+        "tags": [
+          "Web server settings"
+        ],
+        "summary": "Get web server settings",
+        "description": "Web Server Settings are returned.\\\n**This API is available for admin user only.**",
+        "operationId": "gettingwebserversettings",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/WebServerSettings"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Web server settings"
+        ],
+        "summary": "Update web server settings",
+        "description": "Web server settings are updated.\\\n**This API is available for admin user only.**",
+        "operationId": "updatewebserversettings",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Provide web server settings.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WebServerSettings"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/WebServerSettings"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/v1/system/settings/webserver/certificate/servercert": {
+      "post": {
+        "tags": [
+          "Web server settings"
+        ],
+        "summary": "Upload certificate",
+        "description": "A new server certificate is uploaded\\\n**This API is available for admin user only.**",
+        "operationId": "servercert",
+        "consumes": [
+          "application/octet-stream"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "file",
+            "description": "Provide content of certificate in DER format.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/v1/system/settings/webserver/certificate/serverprivatekey": {
+      "post": {
+        "tags": [
+          "Web server settings"
+        ],
+        "summary": "Upload private key",
+        "description": "A new server private key is uploaded.\\\n**This API is available for admin user only.**",
+        "operationId": "serverprivatekey",
+        "consumes": [
+          "application/octet-stream"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "file",
+            "description": "Provide content of key in DER format.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/v1/system/settings/webserver/certificate/clientcacert": {
+      "post": {
+        "tags": [
+          "Web server settings"
+        ],
+        "summary": "Upload client CA certificate",
+        "description": "A new client CA certificate is uploaded.\\\n**This API is available for admin user only.**",
+        "operationId": "clientcacert",
+        "consumes": [
+          "application/octet-stream"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "file",
+            "description": "Provide content of ca cert in DER format.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/v1/system/settings/webserver/certificate/trynewcerts": {
+      "post": {
+        "tags": [
+          "Web server settings"
+        ],
+        "summary": "Try new certs",
+        "description": "New certificates are tried by restarting the web server.\\\nIf you reboot your device or restart the web server without storing it, new certs will be discarded.\\\n**This API is available for admin user only.**",
+        "operationId": "trynewcert",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/v1/system/settings/webserver/certificate/storecerts": {
+      "post": {
+        "tags": [
+          "Web server settings"
+        ],
+        "summary": "Store certs",
+        "description": "The certificates running on a system currently are stored\\\nThis api should be called after trynewcerts API to store new certificates.\\\n**This API is available for admin user only.**",
+        "operationId": "storecerts",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/v1/local/usermngmt": {
+      "get": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Get user Id list",
+        "description": "A list of user Ids is returned.\\\n**This API is available for admin user only.**",
+        "operationId": "gettingusers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Create user account",
+        "description": "A user account is created.\\\n**This API is available for admin user only.**\\\nThe user name and password policy is as follow,\n- Maximum length of a user name is 20.\n- User password must be between 8 and 20 characters.\n- User password must contain at least one uppercase, or capital, letter (ex: A, B, etc.)\n- User password must contain at least one lowercase letter.\n- User password must contain at least one number digit (ex: 0, 1, 2, 3, etc.)\n- User password must contain at least one special character -for example: $, #, @, !,%,^,&,*,(,)",
+        "operationId": "creatinguser",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Provide user information to create a new account.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserCreation"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/UserInfo"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/v1/local/usermngmt/admin": {
+      "put": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Update admin user",
+        "description": "Admin user information is updated.\\\n**This API is available for admin user only.**\\\nThe admin name and password policy is as follow,\n- Maximum length of a user name is 20.\n- User password must be between 8 and 20 characters.\n- User password must contain at least one uppercase, or capital, letter (ex: A, B, etc.)\n- User password must contain at least one lowercase letter.\n- User password must contain at least one number digit (ex: 0, 1, 2, 3, etc.)\n- User password must contain at least one special character -for example: $, #, @, !,%,^,&,*,(,)",
+        "operationId": "updateadmin",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Provide user information to create a new account.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/adminUser"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/v1/local/usermngmt/{userId}": {
+      "get": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Get user information",
+        "description": "User information is returned.\\\n**This API is available for admin user only.**",
+        "operationId": "gettinguser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "unique number of user.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/UserInfo"
+            }
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Update user information",
+        "description": "User information is updated.\\\n**This API is available for admin user only.**",
+        "operationId": "updateuser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "unique number of user.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Provide user information to update.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserUpdate"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/UserInfo"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Delete user account",
+        "description": "User information is deleted.\\\n**This API is available for admin user only.**",
+        "operationId": "deleteuser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "unique number of user.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/objects": {
+      "get": {
+        "tags": [
+          "Local object"
+        ],
+        "summary": "Get Object list",
+        "description": "A list of object Ids that are accessible via the APIs.  \nHere's a list of object types available.\n- 0: Analog-Input Object\n- 1: Analog-Output Object\n- 2: Analog-Value Object\n- 3: Binary-Input Object\n- 4: Binary-Output Object\n- 5: Binary-Value Object\n- 9: Event-enrollment Object (Available from the RP application software v5.0.x)\n- 13: Multi-state Input Object\n- 14: Multi-state Output Object\n- 15: Notification-class Object (Available from the RP application software v5.0.x)\n- 19: Multi-state Value Object\n- 40: Characterstring-Value Object (Available from the RP application software v5.0.x)\n- 44: Datetime-Value Object (Available from the RP application software v5.0.x)\n- 45: Integer-Value Object\n- 146: MPX-Integer-Input Object (Proprietary object, Available from the RP application software v5.0.x)\n- 148: MPX-Integer-Output Object (Proprietary object, Available from the RP application software v5.0.x)\n\nThe Sandbox application for this API document return BACnet object data based on the RP-33 BMS application. For more information, see the Limitations section in this document.",
+        "operationId": "gettingobject",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectType",
+            "in": "query",
+            "description": "This is optional. BACnet Object type.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Objects"
+            }
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/objects/{objectId}": {
+      "get": {
+        "tags": [
+          "Local object"
+        ],
+        "summary": "Find BACnet object by ID",
+        "description": "A single object is returned.\n\nThe Sandbox application for this API document returns BACnet object data based on RP-33 BMS application. For more information, see the Limitations section in this document.",
+        "operationId": "getObjectById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "path",
+            "description": "objectId is combination of object type and instance number.\nFor example, 00000000 01 (object type: 1) / 000000 00000000 00001011 (instance Number: 11)",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Object"
+            }
+          },
+          "404": {
+            "description": "Object not found"
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/objects/{objectId}/properties": {
+      "get": {
+        "tags": [
+          "Local object"
+        ],
+        "summary": "Get property list",
+        "description": "A list of propertyIDs that exist on the object is returned.\\\nYou will find the BACnet Property Identifier in the BACnet protocol document.\n\nThe Sandbox application for this API document returns BACnet object data based on RP-33 BMS application. For more information, see the Limitations section in this document.",
+        "operationId": "getObjectPropertiesById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "path",
+            "description": "objectId is combination of object type and instance number.\nFor example, 00000000 01 (object type: 1) / 000000 00000000 00001011 (instance Number: 11)",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Properties"
+            }
+          },
+          "404": {
+            "description": "Properties not found"
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/objects/properties": {
+      "get": {
+        "tags": [
+          "Local object"
+        ],
+        "summary": "Get propertyId list for multiple objects",
+        "description": "A list of propertyIDs that are mutually available for multiple objects is returned.\n\n**This API is available from the RP application software v5.0.x.**\n\nYou will find the BACnet Property Identifier in the BACnet protocol document.\n\nThe Sandbox application for this API document returns BACnet object data based on RP-33 BMS application. For more information, see the Limitations section in this document.",
+        "operationId": "getPropertiesforMultipleObject",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectIds",
+            "in": "query",
+            "description": "One or multiple objectIds are supported up to 20 objectIds, e.g., 1,2,3.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Properties"
+            }
+          },
+          "404": {
+            "description": "Properties not found"
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/objects/{objectId}/properties/{propertyId}": {
+      "get": {
+        "tags": [
+          "Local object"
+        ],
+        "summary": "Find BACnet property by ID",
+        "description": "A single property is returned\n\nThe Sandbox application for this API document returns BACnet object data based on RP-33 BMS application. For more information, see the Limitations section in this document.",
+        "operationId": "getPropertyById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "path",
+            "description": "objectId is combination of object type and instance number.\nFor example, 00000000 01 (object type: 1) / 000000 00000000 00001011 (instance Number: 11)",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "unique property identifier. For more information, see the BACnet Property Identifier subsection in this document.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Property"
+            }
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Local object"
+        ],
+        "summary": "Update property value",
+        "description": "The property value is updated and returned.\n\nThe Sandbox application for this API document returns BACnet object data based on RP-33 BMS application. For more information, see the Limitations section in this document.",
+        "operationId": "updatePropertyValue",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "path",
+            "description": "objectId is combination of object type and instance number.\nFor example, 00000000 01 (object type: 1) / 000000 00000000 00001011 (instance Number: 11)",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "unique property identifier. For more information, see the BACnet Property Identifier subsection in this document.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "index",
+            "in": "query",
+            "description": "This is optional. It can be used to update a value in an array.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "priorityIndex",
+            "in": "query",
+            "description": "This is optional. It can be used to update a priority array via the present value",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Provided a value in anyOfValue object based on the property type. Before you make a request, you need to check the type of the property value, such as \"integer\", \"boolean\", \"string\" and so on.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PropertyRaram"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Property"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/objects/properties/{propertyId}": {
+      "get": {
+        "tags": [
+          "Local object"
+        ],
+        "summary": "Get a property list for multiple objects",
+        "description": "A list of properties that are mutually available for multiple objects is returned.\n\n**This API is available from the RP application software v5.0.x.**\n\nThe Sandbox application for this API document returns BACnet object data based on RP-33 BMS application. For more information, see the Limitations section in this document.",
+        "operationId": "getMultiplePropertyById",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "objectIds",
+            "in": "query",
+            "description": "One or multiple objectIds are supported up to 20 objectIds, e.g., 1,2,3.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "unique property identifier. For more information, see the BACnet Property Identifier subsection in this document.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/PropertyList"
+            }
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/activealarm": {
+      "get": {
+        "tags": [
+          "Local object"
+        ],
+        "summary": "Get active alarm list",
+        "description": "A list of active alarms is returned.\n\n**This API is available from the RP application software v5.0.x.**\n\nThe Sandbox application for this API document return BACnet object data based on the RP-33 BMS application. For more information, see the Limitations section in this document.",
+        "operationId": "gettingactivealarm",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "lastObjectId",
+            "in": "query",
+            "description": "This is optional. If there is more alarms to be returend, 'moreAlarms' will be returned as true. In this case, object Id of the last one from the active alarm list need to be specified to get following alarms.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ActiveAlarm"
+            }
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/notifications/covsubscriptions": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Get subscribed objectId list.",
+        "description": "A list of objectIds which are subscribed is returned.\n\n\n**This API is available from the RP application software v5.0.x.**",
+        "operationId": "getnotifications",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Objects"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Create cov subscriptions for objects.",
+        "description": "Cov subscriptions for objects are created.\n\n**This API is available from the RP application software v5.0.x.**\n\n**This API is available for admin user only.**",
+        "operationId": "createsubscription",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Provide a list of objectIds to be subscribed.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Objects"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Objects"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Delete cov subscriptions for objects.",
+        "description": "Cov subscriptions for objects are deleted.\n\n**This API is available from the RP application software v5.0.x.**\n\n**This API is available for admin user only.**",
+        "operationId": "deletesubscription",
+        "parameters": [
+          {
+            "name": "deleteAll",
+            "in": "query",
+            "description": "This is optional. Set true if you want to delete all.",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Provide a list of objectIds to be subscribed.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Objects"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/notifications/covsubscriptions/{objectId}": {
+      "delete": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Delete cov subscription of an object.",
+        "description": "A cov subscription of an object is deleted.\n\n**This API is available from the RP application software v5.0.x.**\n\n**This API is available for admin user only.**",
+        "operationId": "deletesinglesubscription",
+        "parameters": [
+          {
+            "name": "objectId",
+            "in": "path",
+            "description": "objectId is combination of object type and instance number.\nFor example, 00000000 01 (object type: 1) / 000000 00000000 00001011 (instance Number: 11)",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/v1/protocols/bacnet/local/notifications/messages": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Get notification message list.",
+        "description": "A list of notification messages is returned. It returns up to 20 messages at a request.\n\n\n**This API is available from the RP application software v5.0.x.**",
+        "operationId": "getnotificationsmessages",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "lastNotificationId",
+            "in": "query",
+            "description": "A notificationId of last message that client received in previous request. It will return a list of notification messages after the notificationId.\n\n0 can be provided if it is first request.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/NotificationList"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Token": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "default": "eyJh..."
+        },
+        "token_type": {
+          "type": "string",
+          "default": "bearer"
+        },
+        "expires_in": {
+          "type": "integer",
+          "description": "unit is second"
+        }
+      }
+    },
+    "Objects": {
+      "type": "object",
+      "properties": {
+        "objectIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "Object": {
+      "type": "object",
+      "properties": {
+        "objectId": {
+          "type": "integer"
+        },
+        "objectType": {
+          "type": "integer"
+        },
+        "profileName": {
+          "type": "string"
+        },
+        "objectName": {
+          "type": "string",
+          "description": "It is BACnet name in EBO."
+        },
+        "covSubscriptionSupport": {
+          "type": "boolean",
+          "description": "If it is true, you can create cov subscription. (Available from the RP application software v5.0.x)"
+        }
+      }
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "propertyIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "Property": {
+      "type": "object",
+      "properties": {
+        "objectId": {
+          "type": "integer",
+          "description": "Available from the RP application software v5.0.x"
+        },
+        "propertyId": {
+          "type": "integer",
+          "description": "Please find more information from Developer Guide - BACnet Property Identifier"
+        },
+        "anyOfValue": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnyValue"
+          },
+          "example": [
+            {
+              "type": "boolean",
+              "isArray": false,
+              "value": true
+            },
+            {
+              "type": "integer",
+              "isArray": false,
+              "value": 0
+            },
+            {
+              "type": "string",
+              "isArray": false,
+              "value": "string"
+            },
+            {
+              "type": "float",
+              "isArray": false,
+              "value": 1.2
+            },
+            {
+              "type": "integer",
+              "isArray": true,
+              "value": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "type": "iso8601",
+              "isArray": false,
+              "value": "2022-05-12T10:42:26+00:00"
+            },
+            {
+              "type": "object_property_reference",
+              "isArray": false,
+              "value": {
+                "objectId": 4294967295,
+                "propertyId": 85,
+                "arrayIndex": null,
+                "deviceId": null
+              }
+            },
+            {
+              "type": "event_algorithm_inhibit_ref",
+              "isArray": false,
+              "value": {
+                "objectId": 4294967295,
+                "propertyId": 85,
+                "arrayIndex": null
+              }
+            },
+            {
+              "type": "change_of_state",
+              "isArray": false,
+              "value": {
+                "timeDelay": 0,
+                "listOfValues": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            },
+            {
+              "type": "change_of_value",
+              "isArray": false,
+              "value": {
+                "timeDelay": 0,
+                "referencedPropertyIncrement": 0.1
+              }
+            },
+            {
+              "type": "floating_limit",
+              "isArray": false,
+              "value": {
+                "timeDelay": 0,
+                "setPointRef": {
+                  "objectId": 1,
+                  "propertyId": 85,
+                  "arrayIndex": null,
+                  "deviceId": null
+                },
+                "lowDiff": 5,
+                "highDiff": 3,
+                "deadband": 1
+              }
+            },
+            {
+              "type": "out_of_range",
+              "isArray": false,
+              "value": {
+                "timeDelay": 0,
+                "lowDiff": 1.1,
+                "highDiff": 10.1,
+                "deadband": 0.1
+              }
+            },
+            {
+              "type": "signed_out_of_range",
+              "isArray": false,
+              "value": {
+                "timeDelay": 0,
+                "lowDiff": 1,
+                "highDiff": 10,
+                "deadband": 1
+              }
+            },
+            {
+              "type": "buffer_ready",
+              "isArray": false,
+              "value": {
+                "threshold": 1,
+                "count": 0
+              }
+            }
+          ]
+        },
+        "readOnly": {
+          "type": "boolean"
+        }
+      }
+    },
+    "PropertyList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Property"
+      },
+      "example": [
+        {
+          "objectId": 100,
+          "propertyId": 100,
+          "anyOfValue": [
+            {
+              "type": "boolean",
+              "isArray": false,
+              "value": true
+            }
+          ]
+        },
+        {
+          "objectId": 200,
+          "propertyId": 100,
+          "anyOfValue": [
+            {
+              "type": "boolean",
+              "isArray": false,
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    "PropertyRaram": {
+      "type": "object",
+      "properties": {
+        "anyOfValue": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnyValue"
+          },
+          "example": [
+            {
+              "type": "float",
+              "isArray": false,
+              "value": 1.2
+            }
+          ]
+        }
+      }
+    },
+    "AnyValue": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "isArray": {
+          "type": "boolean"
+        },
+        "value": {
+          "description": "type of the value can be integer, float, boolean or anything based on type of BACnet property value.",
+          "type": "integer"
+        }
+      }
+    },
+    "ActiveAlarm": {
+      "type": "object",
+      "properties": {
+        "listOfAlarms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "objectId": {
+                "type": "integer"
+              },
+              "notifyType": {
+                "type": "integer",
+                "description": "BACnetNotifyType, { alarm(0), event (1), ack-notification (2) }"
+              },
+              "eventState": {
+                "type": "integer",
+                "description": "BACnetEventState, { normal(0), fault (1), offnormal (2), high-limit (3), low-limit (4), life-safety-alarm (2) }"
+              },
+              "acknowledgedTransitions": {
+                "type": "array",
+                "description": "[offnormal transition, fault transition, normal transition]",
+                "items": {
+                  "type": "boolean"
+                },
+                "example": [
+                  false,
+                  false,
+                  false
+                ]
+              },
+              "timeStamp": {
+                "type": "array",
+                "description": "[offnormal time, fault time, normal time]",
+                "items": {
+                  "type": "string",
+                  "description": "ISO 8601"
+                },
+                "example": [
+                  "2022-01-01T00:00:00+00:00",
+                  "2022-01-01T00:00:00+00:00",
+                  "2022-01-01T00:00:00+00:00"
+                ]
+              },
+              "priorities": {
+                "type": "array",
+                "description": "[offnormal priority, fault priority, normal priority]",
+                "items": {
+                  "type": "integer"
+                },
+                "example": [
+                  255,
+                  255,
+                  255
+                ]
+              },
+              "eventEnabled": {
+                "type": "array",
+                "description": "[offnormal enabled, fault enabled, normal enabled]",
+                "items": {
+                  "type": "boolean"
+                },
+                "example": [
+                  false,
+                  false,
+                  false
+                ]
+              }
+            }
+          }
+        },
+        "moreAlarms": {
+          "type": "boolean",
+          "description": "It returns true if there are more active alarms to be returned."
+        }
+      }
+    },
+    "BooleanValue": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "isArray": {
+          "type": "boolean"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      }
+    },
+    "NotificationList": {
+      "type": "object",
+      "properties": {
+        "outOfSync": {
+          "type": "boolean",
+          "description": "It is true when a notification message that has lastNotificationId doesn't exist. It means that the client missed some of notification messages, so that cached values on client could be out of sync with RP controller. In this case, RP controller returns all queued messages and lastNotificationId will be synchronized. If client application has cached values, it should get property values again to refresh them."
+        },
+        "eventNotifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Notification"
+          }
+        }
+      }
+    },
+    "Notification": {
+      "type": "object",
+      "properties": {
+        "notificationId": {
+          "type": "integer"
+        },
+        "objectId": {
+          "type": "integer"
+        },
+        "propertyId": {
+          "type": "integer"
+        },
+        "timeStamp": {
+          "type": "string",
+          "example": "2022-01-01T00:00:00+00:00"
+        },
+        "anyOfValue": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnyValue"
+          },
+          "example": [
+            {
+              "type": "float",
+              "isArray": false,
+              "value": 1.2
+            }
+          ]
+        }
+      }
+    },
+    "WebServerSettings": {
+      "type": "object",
+      "properties": {
+        "portNumber": {
+          "type": "integer",
+          "default": 443
+        },
+        "clientCertificateAuthEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "notificationQueueSize": {
+          "type": "integer",
+          "default": 20,
+          "description": "Range of this value is from 20 to 999, (Available from the RP application software v5.0.x)"
+        },
+        "ewsUserAuthEnabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "ewsIPAddress": {
+          "type": "string"
+        },
+        "ewsPortNumber": {
+          "type": "integer"
+        },
+        "ewsResourceId": {
+          "type": "string"
+        }
+      }
+    },
+    "Users": {
+      "type": "object",
+      "properties": {
+        "userIds": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "UserCreation": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string"
+        },
+        "userPassword": {
+          "type": "string"
+        },
+        "writePermission": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserInfo": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "writePermission": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserUpdate": {
+      "type": "object",
+      "properties": {
+        "userPassword": {
+          "type": "string"
+        },
+        "writePermission": {
+          "type": "boolean"
+        }
+      }
+    },
+    "adminUser": {
+      "type": "object",
+      "properties": {
+        "adminName": {
+          "type": "string",
+          "default": "admin"
+        },
+        "adminPassword": {
+          "type": "string",
+          "default": "password"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about the RP Controller",
+    "url": "https://www.se.com/ww/en/product-range/66378-spacelogic-rpc-controller/"
+  }
+}
